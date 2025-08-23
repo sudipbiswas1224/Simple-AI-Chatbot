@@ -1,0 +1,233 @@
+:root {
+  --bg: #0b0f19;
+  --panel: #0f1629;
+  --panel-2: #0c1323;
+  --text: #e6e9f2;
+  --muted: #9aa4b2;
+  --accent: #7c9cff;
+  --assistant: #151e33;
+  --user: #1f2a44;
+  --chip: #16213a;
+  --ring: #2b385c;
+}
+/* Ensure padding and border are included in width calculations */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  overflow-y: auto; /* allow page scrolling */
+  overflow-x: hidden; /* avoid horizontal scrollbar */
+  background: radial-gradient(1200px 800px at 80% -10%, rgba(124,156,255,0.15), transparent 60%),
+              radial-gradient(1000px 700px at 10% -20%, rgba(124,255,191,0.08), transparent 60%),
+              var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Hide global scrollbars but preserve scroll */
+html, body { -ms-overflow-style: none; scrollbar-width: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none; }
+
+.chat-root {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh; /* allow the page to grow beyond the viewport */
+}
+.chat-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, rgba(15,22,41,0.9), rgba(15,22,41,0.6));
+  border-bottom: 1px solid rgba(124,156,255,0.1);
+  backdrop-filter: saturate(1.2) blur(6px);
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.logo-mark { filter: drop-shadow(0 0 10px rgba(124,156,255,0.7)); }
+.brand-text { letter-spacing: 0.3px; }
+
+.chat-main {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 10px;
+  max-width: 880px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 12px 12px 0;
+}
+
+.messages {
+  overflow: visible; /* no internal scroll; page will scroll instead */
+  padding: 10px 4px 24px;
+}
+/* If a browser still shows scrollbars for this container, hide them */
+.messages { -ms-overflow-style: none; scrollbar-width: none; }
+.messages::-webkit-scrollbar { display: none; }
+
+.message-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  margin: 10px 0;
+  width: 100%;
+  min-width: 0;
+}
+.message-row.left { justify-content: flex-start; }
+.message-row.right { justify-content: flex-end; }
+/* Fix flex sizes so avatar stays fixed, bubble can shrink, and not overflow */
+.message-row .avatar { flex: 0 0 36px; }
+.message-row .bubble { flex: 0 1 auto; min-width: 0; }
+
+/* Slightly reduce gaps on small screens to give bubbles more room */
+@media (max-width: 520px) {
+  .message-row { gap: 8px; }
+  .bubble { padding: 10px 12px; }
+  /* On mobile, account for 8px gap and 36px avatar so bubble can fill the row */
+  .message-row .bubble { max-width: min(80ch, calc(100% - 36px - 8px)); }
+}
+
+.avatar {
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  background: #0f1932;
+  border: 1px solid var(--ring);
+  color: var(--accent);
+}
+.avatar.user {
+  background: #1a243e;
+  color: #c6d3ff;
+}
+
+.bubble {
+  max-width: min(80ch, 100%);
+  min-width: 48px; /* avoid tiny bubbles on very short messages */
+  width: fit-content;
+  padding: 12px 14px;
+  border-radius: 14px;
+  line-height: 1.45;
+  font-size: 15px;
+  border: 1px solid var(--ring);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  overflow-wrap: anywhere; /* prevent overflow on long words/URLs */
+}
+.message-row.right .bubble { text-align: left; }
+
+/* Constrain bubble width to available space (row width minus avatar and gap) */
+.message-row .bubble { max-width: min(80ch, calc(100% - 36px - 10px)); }
+.bubble.assistant {
+  background: var(--assistant);
+}
+.bubble.user {
+  background: var(--user);
+}
+
+
+/* Order children for left/right rows */
+.message-row.left .avatar { order: 0; }
+.message-row.left .bubble { order: 1; }
+.message-row.right .bubble { order: 0; }
+.message-row.right .avatar { order: 1; }
+.typing {
+  display: inline-flex;
+  gap: 4px;
+}
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--muted, #aaa); /* fallback color */
+  opacity: 0.6;
+  animation: bounce 1.2s infinite ease-in-out;
+}
+.typing span:nth-child(2){ animation-delay: 0.15s }
+.typing span:nth-child(3){ animation-delay: 0.3s }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 6px 0 10px;
+}
+.chip {
+  background: var(--chip);
+  color: var(--text);
+  border: 1px solid var(--ring);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.chip:hover { filter: brightness(1.1); }
+
+.chat-input {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 12px 16px;
+  background: linear-gradient(180deg, rgba(11,15,25,0), rgba(11,15,25,0.75) 30%, rgba(11,15,25,1) 70%);
+}
+.input-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--ring);
+  border-radius: 16px;
+  padding: 8px 8px 8px 12px;
+}
+.input-wrap textarea {
+  resize: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 15px;
+  overflow: hidden; /* hide textarea scrollbar */
+  max-height: none; /* allow it to grow with content */
+}
+.send {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--ring);
+  background: var(--panel-2);
+  color: var(--text);
+}
+.send:disabled { opacity: 0.5; cursor: not-allowed; }
+.bubble pre, .bubble code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.bubble pre {
+  background: #151e33;
+  color: #e6e9f2;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
