@@ -4,6 +4,9 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { generateResponse } = require('./src/service/ai.service');
 const cors = require('cors')
+const path = require('path')
+
+console.log(path);
 
 
 

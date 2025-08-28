@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { io } from "socket.io-client";
 import ReactMarkdown from "react-markdown";
-
-
+import sendBtn from './assets/image.png';
 // Simple avatar circle
 function Avatar({ role }) {
   const isUser = role === "user";
@@ -166,20 +165,7 @@ export default function App() {
             disabled={!input.trim() || isTyping}
             aria-label="Send"
           >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3 11l18-8-8 18-2-7-8-3z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                fill="currentColor"
-              />
-            </svg>
+            <img src={sendBtn} alt="Send" height={'30px'} width={'30px'} />
           </button>
         </div>
       </footer>

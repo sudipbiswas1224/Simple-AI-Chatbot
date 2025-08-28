@@ -203,16 +203,24 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0 !important; height: 
   overflow: hidden; /* hide textarea scrollbar */
   max-height: none; /* allow it to grow with content */
 }
-.send {
+/* .send {
   display: inline-grid;
   place-items: center;
+  
   width: 40px;
   height: 40px;
   border-radius: 12px;
   border: 1px solid var(--ring);
   background: var(--panel-2);
   color: var(--text);
-}
+} */
+ .send{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 1px solid white ;
+ }
 .send:disabled { opacity: 0.5; cursor: not-allowed; }
 .bubble pre, .bubble code {
   white-space: pre-wrap;
