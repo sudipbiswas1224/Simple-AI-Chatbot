@@ -56,7 +56,7 @@ export default function App() {
   
   // Initialize socket connection
   useEffect(() =>{
-    let socketInstance = io('http://localhost:3000')
+    let socketInstance = io('https://simple-ai-chatbot-grke.onrender.com')
     setSocket(socketInstance);
 
   },[])
