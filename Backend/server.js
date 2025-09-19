@@ -85,9 +85,9 @@ io.on("connection", (socket) => {
 io -> means server
 socket -> single user 
 */
-
-httpServer.listen(3000, () => {
-  console.log("Server is running on port 3000");
+const port = process.env.PORT || 3000
+httpServer.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 })
 
 
